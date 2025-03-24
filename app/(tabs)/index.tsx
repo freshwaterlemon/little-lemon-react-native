@@ -1,17 +1,30 @@
 // import { Link } from "expo-router";
 import { Text, View } from "react-native";
-import Onboarding from "../onboardingScreen";
+import React, { useEffect, useState } from 'react';
 
 export default function Index() {
+  // const [firstname, setFirstname] = useState('');
+
+  // useEffect(() => {
+  //   const fetchFirstName = async () => {
+  //     try {
+  //       const storedFirstName = await AsyncStorage.getItem('userFirstname');
+  //       if (storedFirstName) {
+  //         setFirstname(storedFirstName);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching first name:', error);
+  //     }
+  //   };
+
+  //   fetchFirstName();
+  // }, []);
+
   return (
     <View
-      className="flex items-center justify-center h-full"
+      className="flex items-center justify-center h-full bg-white"
     >
-      {/* <Onboarding /> */}
       <Text className="text-5xl text-primary-green">Welcome</Text>
-      {/* <Link href="/onboarding">
-        Onboarding
-      </Link> */}
     </View>
   );
 }
