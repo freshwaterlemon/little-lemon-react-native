@@ -10,6 +10,7 @@ const Profile = () => {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [phonenum, setPhonenum] = useState('');
+    const [avatar, setAvatar] = useState(null);
     const [preferences, setPreferences] = useState({
         orderStatus: false,
         passwordChanges: false,
@@ -26,12 +27,14 @@ const Profile = () => {
                     const storedFirstname = await AsyncStorage.getItem('userFirstname');
                     const storedLastname = await AsyncStorage.getItem('userLastname');
                     const storedPhonenum = await AsyncStorage.getItem('userPhonenum');
+                    const storedAvatar = await AsyncStorage.getItem('userAvatar');
                     const storedPreferences = await AsyncStorage.getItem('preferences');
 
                     if (storedEmail) setEmail(storedEmail);
                     if (storedFirstname) setFirstname(storedFirstname);
                     if (storedLastname) setLastname(storedLastname);
                     if (storedPhonenum) setPhonenum(storedPhonenum);
+                    if (storedAvatar) setAvatar(storedAvatar);
                     if (storedPreferences) setPreferences(JSON.parse(storedPreferences));
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
@@ -71,7 +74,15 @@ const Profile = () => {
                     {/* Avatar and Name */}
                     <View className="flex-row py-3 items-center">
                         <View className="size-20 bg-gray-300 rounded-full justify-center items-center mr-3">
-                            <Text className="text-xl text-white">{firstname?.charAt(0).toUpperCase() || "?"}</Text>
+                            {avatar ? (
+                                <Image
+                                    source={{ uri: avatar }}
+                                    className="size-20 rounded-full"
+                                    onError={() => setAvatar(null)} // Reset avatar if image fails to load
+                                />
+                            ) : (
+                                <Text className="text-xl text-white">{firstname?.charAt(0).toUpperCase() || "?"}</Text>
+                            )}
                         </View>
                         <Text className="text-3xl font-semibold mx-2 mt-4">{firstname || "No name found"}</Text>
                         <Text className="text-3xl font-semibold mt-4">{lastname || " "}</Text>
