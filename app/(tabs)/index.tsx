@@ -41,24 +41,24 @@ export default function Index() {
     <ScrollView className="bg-white">
 
       {/* Restaurant Info */}
-      <View className="flex-row bg-primary-green text-white p-4 py-12">
-        <View className='flex-col w-1/2 mx-3'>
+      <View className="flex-row bg-primary-green text-white p-4 py-8 mb-6">
+        <View className='flex-col w-1/2 mx-3 py-6 mt-2'>
           <Text className="text-yellow-400 text-2xl font-bold">
             Little Lemon
           </Text>
           <Text className="text-white text-xl">Chicago</Text>
-          <Text className="text-gray-300 text-sm mt-2">
+          <Text className="text-white text-sm mt-2">
             We are a family-owned Mediterranean restaurant, focused on
             traditional recipes served with a modern twist.
           </Text>
           {/* Search Button */}
           <TouchableOpacity className=" bg-gray-300 p-3 rounded-full w-12 h-12 mt-4">
-            <Text className="text-center text-gray-700 text-lg">🔍</Text>
+            <Text className="text-center text-gray-700 text-lg">🔍 Search</Text>
           </TouchableOpacity>
         </View>
         <Image
           source={HEADER.hero}
-          className="size-40 rounded-lg mt-3"
+          className="w-2/5 h-full rounded-lg my-3"
         />
       </View>
 
@@ -79,7 +79,7 @@ export default function Index() {
       </View>
 
       {/* Menu List */}
-      <View className="mt-6 px-4 mx-2">
+      <View className="mt-4 px-4 mx-2">
         {menuItems.map((item, index) => (
           <View
             key={index}
