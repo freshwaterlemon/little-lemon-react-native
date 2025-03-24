@@ -59,13 +59,14 @@ export default function Index() {
         <Image
           source={HEADER.hero}
           className="w-2/5 h-full rounded-lg my-3"
+          style={{ resizeMode: 'cover' }}
         />
       </View>
 
 
 
       {/* Categories */}
-      <View className="flex-row justify-between mt-6 px-4">
+      <View className="flex-row justify-between mt-4 px-6">
         {categories.map((category, index) => (
           <TouchableOpacity
             key={index}
@@ -79,7 +80,7 @@ export default function Index() {
       </View>
 
       {/* Menu List */}
-      <View className="mt-4 px-4 mx-2">
+      <View className="mt-4 px-2 mx-2">
         {menuItems.map((item, index) => (
           <View
             key={index}
