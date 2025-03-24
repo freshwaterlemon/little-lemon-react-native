@@ -21,6 +21,7 @@ export default function RootLayout() {
         }
 
         const hasSeenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
+
         if (hasSeenOnboarding === 'true') {
           setTimeout(() => {
             router.replace('/loginScreen'); // Go to login screen

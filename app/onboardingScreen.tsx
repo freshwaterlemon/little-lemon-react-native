@@ -21,8 +21,8 @@ const OnboardingScreen = ({ navigation }: any) => {
             <Stack.Screen options={{ headerShown: false }} />
             <Onboarding
                 DoneButtonComponent={Done}
-                onDone={() => router.replace('/(tabs)')}
-                onSkip={() => router.replace('/(tabs)')}
+                onDone={() => router.replace('/loginScreen')}
+                onSkip={() => router.replace('/loginScreen')}
                 pages={[
                     {
                         backgroundColor: '#495E57',
