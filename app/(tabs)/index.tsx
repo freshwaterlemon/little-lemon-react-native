@@ -1,34 +1,117 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, FlatList, ActivityIndicator } from 'react-native';
+import useFetchMenu from '@/hooks/fetchMenu';
 import {
-	View,
-	Text,
-	Image,
-	TouchableOpacity,
-	FlatList,
-	ActivityIndicator,
-} from 'react-native';
-import fetchMenu from '@/hooks/fetchMenu';
-import { FOOD, HEADER, IMAGE } from '@/constants';
-
-// Define the type for a menu item
-type MenuItem = {
-	name: string;
-	description: string;
-	price: string;
-	image: string;
-	category?: string;
-};
+	MenuItem,
+	initDatabase,
+	getMenuItems,
+	saveMenuItems,
+	searchMenuItems,
+} from '@/database';
+import CategoryList from '@/components/CategoryList';
+import HeroBanner from '@/components/HeroBanner';
 
 export default function Index() {
-	const { data: menuItems, loading } = fetchMenu() as {
-		data: MenuItem[];
-		loading: boolean;
-	};
+	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [searchText, setSearchText] = useState('');
+	const [debouncedSearchText, setDebouncedSearchText] = useState('');
+	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const { data: apiData, loading: apiLoading } = useFetchMenu();
+	const [allCategories, setAllCategories] = useState<string[]>([]);
 
-	// Extract unique categories safely
+	// Extract unique categories from menu items
 	const uniqueCategories = [
 		...new Set(menuItems.map((item) => item.category || 'extra')),
 	];
+
+	// Debounce search text
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedSearchText(searchText);
+		}, 500);
+
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [searchText]);
+
+	// Initialize database and load initial data
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				await initDatabase();
+				const storedItems = await getMenuItems();
+
+				if (storedItems.length > 0) {
+					setMenuItems(storedItems);
+					const uniqueCats = [
+						...new Set(
+							storedItems.map((item) => item.category || 'extra')
+						),
+					];
+					setAllCategories(uniqueCats);
+					setLoading(false);
+				} else if (apiData && apiData.length > 0) {
+					await saveMenuItems(apiData);
+					setMenuItems(apiData);
+					const uniqueCats = [
+						...new Set(
+							apiData.map((item) => item.category || 'extra')
+						),
+					];
+					setAllCategories(uniqueCats);
+					setLoading(false);
+				}
+			} catch (error) {
+				console.error('Error loading data:', error);
+				if (!apiLoading && apiData && apiData.length > 0) {
+					setMenuItems(apiData);
+					const uniqueCats = [
+						...new Set(
+							apiData.map((item) => item.category || 'extra')
+						),
+					];
+					setAllCategories(uniqueCats);
+					setLoading(false);
+				}
+			}
+		};
+
+		if (!apiLoading) {
+			loadData();
+		}
+	}, [apiData, apiLoading]);
+
+	// Filter menu items when search text or selected categories change
+	useEffect(() => {
+		const filterItems = async () => {
+			if (!loading) {
+				try {
+					const filteredItems = await searchMenuItems(
+						debouncedSearchText,
+						selectedCategories
+					);
+					setMenuItems(filteredItems);
+				} catch (error) {
+					console.error('Error filtering menu items:', error);
+				}
+			}
+		};
+
+		filterItems();
+	}, [debouncedSearchText, selectedCategories, loading]);
+
+	// Handle category selection
+	const handleCategoryPress = (category: string) => {
+		setSelectedCategories((prev) => {
+			if (prev.includes(category)) {
+				return prev.filter((cat) => cat !== category);
+			} else {
+				return [...prev, category];
+			}
+		});
+	};
 
 	// Show loading indicator while data is being fetched
 	if (loading) {
@@ -40,73 +123,49 @@ export default function Index() {
 	}
 
 	return (
-		<View className="bg-white flex-1">
-			<View>
-				{/* Restaurant Info */}
-				<View className="flex-row bg-primary-green text-white p-4 py-2 pb-4 mb-4">
-					<View className="flex-col w-1/2 mx-3 py-6 mt-2">
-						<Text className="text-yellow-400 text-2xl font-bold">
-							Little Lemon
-						</Text>
-						<Text className="text-white text-xl">Chicago</Text>
-						<Text className="text-white text-sm mt-2">
-							We are a family-owned Mediterranean restaurant,
-							focused on traditional recipes served with a modern
-							twist.
-						</Text>
-						{/* Search Button */}
-						<TouchableOpacity className=" bg-primary-yellow p-3 rounded-lg w-1/2 mt-4">
-							<Text className="text-center text-highlight-black text-base font-bold">
-								Search
-							</Text>
-						</TouchableOpacity>
-					</View>
-					<Image
-						source={HEADER.hero}
-						className="w-1/2 h-full rounded-lg my-3 pr-6 py-4"
-						style={{ resizeMode: 'cover' }}
-					/>
-				</View>
+		<View className="flex-1 bg-white">
+			{/* Hero Banner with Search */}
+			<HeroBanner />
 
-				{/* Categories */}
-				<View className="flex-row justify-between my-4 px-6 gap-2">
-					{uniqueCategories.map((category, index) => (
-						<TouchableOpacity
-							key={index}
-							className="px-4 py-2 bg-primary-green rounded-full"
-						>
-							<Text className="text-highlight-grey font-semibold">
-								{category}
-							</Text>
-						</TouchableOpacity>
-					))}
-				</View>
-			</View>
-
-			{/* Menu List using FlatList */}
+			<CategoryList
+				categories={uniqueCategories}
+				allCategories={allCategories}
+				selectedCategories={selectedCategories}
+				onCategoryPress={handleCategoryPress}
+				searchText={searchText}
+				onSearchChange={setSearchText}
+			/>
+			{/* Menu List */}
 			<FlatList
 				data={menuItems}
-				keyExtractor={(item) => item.name} // Use the item name as the key
+				keyExtractor={(item) => item.name}
+				initialNumToRender={5}
 				renderItem={({ item }) => (
-					<View className="flex-row items-center justify-between border-t border-gray-200 py-3 mt-2">
-						<View className="flex-1 px-4">
-							<Text className="text-lg font-semibold">
+					<View className="flex-row border-t border-gray-200 px-6 py-4">
+						<View className="flex-1 mr-6">
+							<Text className="text-lg font-semibold mb-1">
 								{item.name}
 							</Text>
-							<Text className="text-highlight-black text-sm">
+							<Text className="text-gray-600 text-sm mb-4">
 								{item.description}
 							</Text>
-							<Text className="text-highlight-black font-extrabold mt-2">
+							<Text className="font-bold">
 								${parseFloat(item.price).toFixed(2)}
 							</Text>
 						</View>
 						<Image
 							source={{ uri: item.image }}
-							className="w-24 h-24 pr-4 rounded-lg"
+							className="w-24 h-24 mt-2 rounded-lg"
 						/>
 					</View>
 				)}
-				ListFooterComponent={<View style={{ height: 20 }} />}
+				ListEmptyComponent={
+					<View className="p-8 items-center">
+						<Text className="text-base text-gray-500">
+							No menu items found
+						</Text>
+					</View>
+				}
 			/>
 		</View>
 	);

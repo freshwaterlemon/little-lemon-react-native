@@ -9,13 +9,13 @@ export const IMAGE = {
 	lemon: require('@/assets/images/icon.png'),
 };
 
-export const FOOD: Record<string, any> = {
-	greekSalad: require('@/assets/images/greekSalad.jpg'),
-	lemonDessert: require('@/assets/images/lemonDessert.jpg'),
-	bruschetta: require('@/assets/images/bruschetta.jpg'),
-	pasta: require('@/assets/images/pasta.jpg'),
-	grilledFish: require('@/assets/images/grilledFish.jpg'),
-};
+// export const FOOD: Record<string, any> = {
+// 	greekSalad: require('@/assets/images/greekSalad.jpg'),
+// 	lemonDessert: require('@/assets/images/lemonDessert.jpg'),
+// 	bruschetta: require('@/assets/images/bruschetta.jpg'),
+// 	pasta: require('@/assets/images/pasta.jpg'),
+// 	grilledFish: require('@/assets/images/grilledFish.jpg'),
+// };
 
 export const HEADER = {
 	hero: require('@/assets/images/Hero.png'),
