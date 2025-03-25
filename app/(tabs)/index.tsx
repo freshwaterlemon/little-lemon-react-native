@@ -8,8 +8,8 @@ import {
 	saveMenuItems,
 	searchMenuItems,
 } from '@/database';
-import CategoryList from '@/app/components/CategoryList';
-import HeroBanner from '@/app/components/HeroBanner';
+import CategoryList from '@/components/CategoryList';
+import HeroBanner from '@/components/HeroBanner';
 
 export default function Index() {
 	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
