@@ -6,14 +6,15 @@ export const ICONS = {
 };
 export const IMAGE = {
 	banner: require('@/assets/images/little-lemon-banner.png'),
+	lemon: require('@/assets/images/icon.png'),
 };
 
-export const FOOD = {
-	greek_salad: require('@/assets/images/greeksalad.png'),
-	lemon_dessert: require('@/assets/images/lemon_dessert.png'),
-	bruschetta: require('@/assets/images/Bruschetta.png'),
-	pasta: require('@/assets/images/Pasta.png'),
-	grilled_fish: require('@/assets/images/grilled_fish.png'),
+export const FOOD: Record<string, any> = {
+	greekSalad: require('@/assets/images/greekSalad.jpg'),
+	lemonDessert: require('@/assets/images/lemonDessert.jpg'),
+	bruschetta: require('@/assets/images/bruschetta.jpg'),
+	pasta: require('@/assets/images/pasta.jpg'),
+	grilledFish: require('@/assets/images/grilledFish.jpg'),
 };
 
 export const HEADER = {

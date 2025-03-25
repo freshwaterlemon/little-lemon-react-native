@@ -153,7 +153,7 @@ const UpdateProfile = () => {
                         <TouchableOpacity onPress={saveProfile} className="w-full h-12 mt-4 bg-primary-green justify-center items-center rounded-lg">
                             <Text className="text-white text-lg font-bold text-center">Save Changes</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={cancel} className="w-full h-12 mt-4 bg-secondary-coral justify-center items-center rounded-lg">
+                        <TouchableOpacity onPress={cancel} className="w-full h-12 mt-4 bg-red-500 justify-center items-center rounded-lg">
                             <Text className="text-white text-lg font-bold text-center">Cancel</Text>
                         </TouchableOpacity>
                     </View>
