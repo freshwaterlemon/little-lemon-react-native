@@ -19,7 +19,9 @@ export default function HeroBanner() {
 			<Image
 				source={HEADER.hero}
 				className="w-1/2 h-full rounded-lg my-3 pr-6 py-4"
-				style={{ resizeMode: 'cover' }}
+				style={{
+					resizeMode: 'cover',
+				}}
 			/>
 		</View>
 	);
